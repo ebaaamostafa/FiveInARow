@@ -25,8 +25,10 @@ class HumanPlayer(Player):
 
 
 class AIPlayer(Player):
-    def __init__(self, name: str, symbol: str):
+    def __init__(self, name: str, symbol: str, AIAlgorithm):
         super().__init__(name, symbol)
+        self.AIAlgorithm = AIAlgorithm
+        self.depth = 3
 
     def get_move(self,board):
         # after implementing minimax and alpha-beta pruning
