@@ -10,7 +10,6 @@ class Player:
         return f"Player {self.name} with symbol {self.symbol}"
 
     @abstractmethod
-    # takes the board for minimax and alpha-beta pruning
     def get_move(self, board):
         pass
 
@@ -31,15 +30,30 @@ class AIPlayer(Player):
         self.algorithm = algorithm
         self.depth = depth
         self.opponent_symbol = 'W' if symbol == 'B' else 'B'
+        self.is_alpha_beta = 'alpha_beta' in algorithm.__name__
 
     def get_move(self, board):
         print(f"{self.name} is thinking...")
-        score, x, y = self.algorithm(
-            board,
-            self.depth,
-            True,
-            self.symbol,
-            self.opponent_symbol
-        )
+
+        if self.is_alpha_beta:
+            score, x, y = self.algorithm(
+                board,
+                self.depth,
+                float('-inf'),  # alpha
+                float('inf'),  # beta
+                True,  # is_maximizing
+                self.symbol,  # max_player
+                self.opponent_symbol  # min_player
+            )
+        else:
+            # minimax
+            score, x, y = self.algorithm(
+                board,
+                self.depth,
+                True,  # is_maximizing
+                self.symbol,  # max_player
+                self.opponent_symbol  # min_player
+            )
+
         print(f"{self.name} chose position ({x}, {y})")
         return x, y

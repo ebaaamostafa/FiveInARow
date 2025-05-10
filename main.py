@@ -178,7 +178,6 @@ class GomokuGUI:
         player = self.players[self.current_player_index]
         if not isinstance(player, AIPlayer):
             return
-
         x, y = player.get_move(self.board)
         if x is not None and y is not None:
             self.board.place_stone(x, y, player.symbol)
@@ -186,6 +185,10 @@ class GomokuGUI:
             if self.check_game_end():
                 return
             self.current_player_index = 1 - self.current_player_index
+
+            next_player = self.players[self.current_player_index]
+            if isinstance(next_player, AIPlayer):
+                self.root.after(1000, self.ai_move)
 
     def check_game_end(self):
         player = self.players[self.current_player_index]

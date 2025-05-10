@@ -22,7 +22,6 @@ class Board:
         print('__' * (self.size + 1))
 
     def check_winner(self, player: str) -> bool:
-        # Check horizontal, vertical, and diagonal lines for a win
         for x in range(self.size):
             for y in range(self.size):
                 if self.__check_line(x, y, player, 5):
@@ -30,7 +29,6 @@ class Board:
         return False
 
     def check_draw(self) -> bool:
-        # Check if the board is full
         for row in self.board:
             if '.' in row:
                 return False
@@ -51,7 +49,7 @@ class Board:
             return True
 
         # Check diagonal (bottom-left to top-right)
-        if x - length - 1 >= 0 and y + length - 1 < self.size and all(
+        if x - (length - 1) >= 0 and y + length - 1 < self.size and all(
                 self.board[x - i][y + i] == player for i in range(length)):
             return True
 
