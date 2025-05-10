@@ -1,4 +1,4 @@
-import rules, Players, Board, AIPlayer
+import Players, Board
 
 
 # while game is running
