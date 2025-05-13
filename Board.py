@@ -54,12 +54,3 @@ class Board:
             return True
 
         return False
-
-    # for heuristic evaluation
-    # def count_four_in_a_row(self, player: str) -> int:
-    #     count = 0
-    #     for x in range(self.size):
-    #         for y in range(self.size):
-    #             if self.__check_line(x, y, player):
-    #                 count += 1
-    #     return count
