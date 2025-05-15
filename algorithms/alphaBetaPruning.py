@@ -63,6 +63,6 @@ def alpha_beta_pruning(board, depth, alpha, beta, is_maximizing, max_player, min
 
             beta = min(beta, best_score)
             if beta <= alpha:
-                break  # Alpha cutoff
+                break
 
         return best_score, best_move[0], best_move[1]

@@ -41,7 +41,7 @@ def quick_evaluation(board, x, y, player):
         if count >= 5:  # Win
             score += 10000
         elif count == 4:
-            if open_ends == 2:  # Open four (very strong)
+            if open_ends == 2:  # Open four, both ends
                 score += 2000
             elif open_ends == 1:  # Half-open four
                 score += 500
@@ -65,12 +65,12 @@ def quick_evaluation(board, x, y, player):
     return score
 
 
-# counts how many similar marks are in a line (consecutive) AND how many open ends they have
+# counts how many similar cells are in a line (consecutive) AND how many open ends they have
 def count_in_line(board, x, y, dx, dy, player):
-    count = 1  # the stone at (x,y)
+    count = 1  # stone at (x,y)
     open_ends = 0
 
-    # Check in the positive direction
+    # Positive direction
     for i in range(1, 5):
         nx, ny = x + i * dx, y + i * dy
         if 0 <= nx < board.size and 0 <= ny < board.size:
@@ -84,7 +84,7 @@ def count_in_line(board, x, y, dx, dy, player):
         else:  # Out of bounds
             break
 
-    # Check in the negative direction
+    # Negative direction
     for i in range(1, 5):
         nx, ny = x - i * dx, y - i * dy
         if 0 <= nx < board.size and 0 <= ny < board.size:
