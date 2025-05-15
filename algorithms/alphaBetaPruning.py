@@ -1,3 +1,4 @@
+import random
 from algorithms.common import *
 
 
@@ -33,6 +34,7 @@ def alpha_beta_pruning(board, depth, alpha, beta, is_maximizing, max_player, min
         center = board.size // 2
         return 0, center, center
 
+    dict_moves = {}
     if is_maximizing:
         best_score = float('-inf')
         for x, y in valid_moves:
@@ -42,12 +44,18 @@ def alpha_beta_pruning(board, depth, alpha, beta, is_maximizing, max_player, min
 
             if score > best_score:
                 best_score = score
-                best_move = x, y
+                # best_move = x, y
+
+            if score not in dict_moves:
+                dict_moves[score] = [(x, y)]
+            else:
+                dict_moves[score].append((x, y))
 
             alpha = max(alpha, best_score)
             if beta <= alpha:
                 break
 
+        best_move = random.choice(dict_moves[best_score])
         return best_score, best_move[0], best_move[1]
 
     else:
@@ -59,10 +67,16 @@ def alpha_beta_pruning(board, depth, alpha, beta, is_maximizing, max_player, min
 
             if score < best_score:
                 best_score = score
-                best_move = x, y
+                # best_move = x, y
+
+            if score not in dict_moves:
+                dict_moves[score] = [(x, y)]
+            else:
+                dict_moves[score].append((x, y))
 
             beta = min(beta, best_score)
             if beta <= alpha:
                 break
 
+        best_move = random.choice(dict_moves[best_score])
         return best_score, best_move[0], best_move[1]
