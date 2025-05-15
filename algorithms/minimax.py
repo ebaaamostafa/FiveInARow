@@ -1,3 +1,4 @@
+import random
 def minimax(board, depth, is_maximizing, max_player, min_player):
     current_player = max_player if is_maximizing else min_player
     opponent = min_player if is_maximizing else max_player
@@ -31,6 +32,7 @@ def minimax(board, depth, is_maximizing, max_player, min_player):
         center = board.size // 2
         return 0, center, center
 
+    dict_moves = {}
     for x, y in valid_moves:
         board.place_stone(x, y, current_player)
         next_depth = depth - 1
@@ -38,11 +40,15 @@ def minimax(board, depth, is_maximizing, max_player, min_player):
         board.remove_stone(x, y)
         if is_maximizing and score > best_score:
             best_score = score
-            best_move = x, y
+            # best_move = x, y
         elif not is_maximizing and score < best_score:
             best_score = score
-            best_move = x, y
-
+            # best_move = x, y
+        if score not in dict_moves:
+            dict_moves[score] = [(x, y)]
+        else:
+            dict_moves[score].append((x, y))
+    best_move = random.choice(dict_moves[best_score])
     return best_score, best_move[0], best_move[1]
 
 
