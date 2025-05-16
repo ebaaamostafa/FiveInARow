@@ -1,4 +1,13 @@
 def find_winning_move(board, player):
+    """Look for a move that would let the player win immediately.
+
+    Args:
+        board:
+        player:
+
+    Returns:
+        x, y: Position of win move, or None if no immediate win is possible
+    """
     moves = get_valid_moves(board)
     for x, y in moves:
         board.place_stone(x, y, player)
@@ -10,12 +19,29 @@ def find_winning_move(board, player):
 
 
 def get_most_promising_moves(board, player, opponent, max_moves=7):
+    """Returns up to max_moves of the most promising moves using a heuristic.
+
+    Args:
+        board:
+        player:
+        opponent:
+        max_moves (int, optional): Defaults to 7.
+
+    Returns:
+        Array: List of top N moves
+    """
+    
+    # Get all valid moves
     all_moves = get_valid_moves(board)
     if not all_moves:
         center = board.size // 2
         return [(center, center)]
 
     move_scores = []
+    # For each move
+    # 1. Place it as a player, then evaluate
+    # 2. Place it as the opponent, then evaluate
+    # 3. Adds weighted scores for both
     for x, y in all_moves:
         board.place_stone(x, y, player)
         player_score = quick_evaluation(board, x, y, player)
@@ -28,11 +54,24 @@ def get_most_promising_moves(board, player, opponent, max_moves=7):
         total_score = player_score + opponent_score * 0.8
         move_scores.append((total_score, x, y))
 
+    # Sort moves by total score
     move_scores.sort(reverse=True)
+    # return top N moves
     return [(x, y) for _, x, y in move_scores[:max_moves]]
 
 
 def quick_evaluation(board, x, y, player):
+    """Evaluates how strong a move is by analyzing the pattern it creates at (x, y).
+
+    Args:
+        board:
+        x:
+        y:
+        player:
+
+    Returns:
+        score: how strong a move is
+    """
     score = 0
     directions = [(0, 1), (1, 0), (1, 1), (1, -1)]
 
@@ -58,6 +97,7 @@ def quick_evaluation(board, x, y, player):
         elif count == 1 and open_ends > 0:
             score += 1
 
+    # add bonus points for being closer to the center
     center = board.size // 2
     center_distance = abs(x - center) + abs(y - center)
     score += max(0, 5 - center_distance) * 2
@@ -65,8 +105,19 @@ def quick_evaluation(board, x, y, player):
     return score
 
 
-# counts how many similar cells are in a line (consecutive) AND how many open ends they have
 def count_in_line(board, x, y, dx, dy, player):
+    """Counts how many similar cells are in a line (consecutive) AND how many open ends they have
+    Args:
+        board:
+        x:
+        y :        
+        dx:
+        dy:
+        player:
+
+    Returns:
+        count, open_ends: count of similar cells in a line & open_ends
+    """
     count = 1  # stone at (x,y)
     open_ends = 0
 
@@ -102,6 +153,14 @@ def count_in_line(board, x, y, dx, dy, player):
 
 
 def get_valid_moves(board):
+    """Generates a list of all valid positions where a player might want to move.
+
+    Args:
+        board:
+
+    Returns:
+        moves (list): List of valid moves
+    """
     moves = []
     checked = set()
 
@@ -137,6 +196,16 @@ def get_valid_moves(board):
 
 
 def evaluate_board(board, max_player, min_player):
+    """Perform static evaluation of a board state.
+
+    Args:
+        board:
+        max_player: 
+        min_player:
+
+    Returns:
+        score: difference between max_score and min_score
+    """
     max_patterns = get_board_patterns(board, max_player)
     min_patterns = get_board_patterns(board, min_player)
 
@@ -147,6 +216,15 @@ def evaluate_board(board, max_player, min_player):
 
 
 def get_board_patterns(board, player):
+    """Scans the board and counts important patterns for a given player:
+
+    Args:
+        board:
+        player:
+
+    Returns:
+        patterns (dict): counts of patterns
+    """
     patterns = {
         'open_two': 0,
         'open_three': 0,
@@ -181,6 +259,14 @@ def get_board_patterns(board, player):
 
 
 def patterns_to_scores(patterns):
+    """Sssign numerical values to each pattern:
+
+    Args:
+        patterns (dict): Patterns count
+
+    Returns:
+        score: score based on patterns 
+    """
     score = 0
     score += patterns['five'] * 100000
     score += patterns['open_four'] * 10000
