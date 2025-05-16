@@ -19,6 +19,14 @@ class HumanPlayer(Player):
         super().__init__(name, symbol)
 
     def get_move(self, board):
+        """Prompts the human to input a move like 2 3.
+
+        Args:
+            board (_type_):
+
+        Returns:
+            x, y: input row and column
+        """
         move = input(f"{self.name}, enter your move (row and column): ")
         x, y = map(int, move.split())
         return x, y
@@ -33,6 +41,14 @@ class AIPlayer(Player):
         self.is_alpha_beta = 'alpha_beta' in algorithm.__name__
 
     def get_move(self, board):
+        """Gets a move based on selected algorithm (Minimax | Alpha-Beta)
+
+        Args:
+            board (_type_): Board to make move on
+
+        Returns:
+            x, y: Row and column of AI move 
+        """
         print(f"{self.name} is thinking...")
 
         if self.is_alpha_beta:
