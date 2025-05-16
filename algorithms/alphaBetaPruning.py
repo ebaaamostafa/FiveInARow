@@ -3,7 +3,10 @@ from algorithms.common import *
 
 
 def alpha_beta_pruning(board, depth, alpha, beta, is_maximizing, max_player, min_player):
-    """_summary_
+    """
+    - Smartly evaluates the game tree to choose optimal moves.
+    - Uses alpha-beta pruning to avoid exploring bad branches.
+    - Prioritizes winning, blocking, and high-value heuristics.
 
     Args:
         board: 
