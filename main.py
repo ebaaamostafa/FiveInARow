@@ -86,6 +86,8 @@ class GomokuGUI:
         self.setup_game_page()
 
     def setup_game_page(self):
+        """Sets up canvas for board drawing.
+        """
         if self.frame_start.winfo_ismapped():
             self.frame_start.pack_forget()
 
@@ -112,6 +114,8 @@ class GomokuGUI:
             self.root.after(100, self.ai_move)
 
     def draw_board(self):
+        """draws grid and all current stones.
+        """
         self.canvas.delete("all")
         for i in range(self.board_size):
             self.canvas.create_line(i * CELL_SIZE, 0, i * CELL_SIZE, self.board_size * CELL_SIZE, fill=GRID_COLOR, width=GRID_WIDTH)
@@ -124,6 +128,13 @@ class GomokuGUI:
                     self.draw_piece(x, y, symbol)
 
     def draw_piece(self, x, y, symbol):
+        """draws a black or white rectangle where a move is made.
+        
+        Args:
+            x (int): position x
+            y (int): position y
+            symbol (char): Color of piece
+        """
         padding = 5
         x1 = y * CELL_SIZE + padding
         y1 = x * CELL_SIZE + padding
@@ -132,6 +143,11 @@ class GomokuGUI:
         self.canvas.create_rectangle(x1, y1, x2, y2, fill=PLAYER_COLORS[symbol])
 
     def human_move(self, position):
+        """Handles mouse clicks. Places human's stone if valid, then switches to next player. If AI is next, triggers `ai_move(self)`.
+
+        Args:
+            position: x & y coordinates
+        """
         player = self.players[self.current_player_index]
         if not isinstance(player, HumanPlayer):
             return
@@ -149,6 +165,8 @@ class GomokuGUI:
         self.root.after(100, self.ai_move)
 
     def ai_move(self):
+        """Calls `get_move(board)` on the current AI player. Places the move, redraws board. Then checks for game end and triggers next AI move if both are AIs.
+        """
         if not self.players or self.current_player_index >= len(self.players):
             return
         player = self.players[self.current_player_index]
@@ -168,6 +186,11 @@ class GomokuGUI:
                 self.root.after(100, self.ai_move)
 
     def check_game_end(self):
+        """Uses `board.check_winner(symbol)` or `board.check_draw()`
+
+        Returns:
+            bool: True if game ended
+        """
         player = self.players[self.current_player_index]
         if self.board.check_winner(player.symbol):
             self.show_game_over_popup(f"{player.name} wins!")
